@@ -1,5 +1,5 @@
 import streamlit as st
-import pyrebase4 as pyrebase
+import pyrebase
 import requests
 import pandas as pd
 import pydeck as pdk

@@ -1,6 +1,7 @@
 streamlit
 requests
-pyrebase4==5.2.3
+pyrebase
 firebase-admin
 pandas
 folium
+setuptools
