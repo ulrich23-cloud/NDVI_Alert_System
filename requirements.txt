@@ -1,5 +1,5 @@
 streamlit
-pyrebase4==4.5.0
+pyrebase==3.0.1
 pycryptodome==3.19.0
 requests
 pandas
