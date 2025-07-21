@@ -5,8 +5,5 @@ firebase_config = {
     "storageBucket": "soolalaalertfirebase.appspot.com",
     "messagingSenderId": "341018928054",
     "appId": "1:341018928054:web:XXXXXX",
-    "databaseURL": "",
-
-    # ✅ Ajoute cette ligne obligatoire pour corriger le bug :
-    "serviceAccount": "mock"
+    "databaseURL": ""
 }
