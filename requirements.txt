@@ -1,7 +1,8 @@
 streamlit
+pyrebase4==4.5.0
+pycryptodome==3.19.0
 requests
-pyrebase
-firebase-admin
 pandas
 folium
+streamlit-folium
 setuptools
