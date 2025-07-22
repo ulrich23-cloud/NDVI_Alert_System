@@ -12,7 +12,7 @@ auth = firebase.auth()
 
 # Configuration Streamlit
 st.set_page_config(page_title="Système NDVI", layout="centered")
-st.title("📡 Système d'Alerte NDVI – Réserve de So’o Lala")
+st.title("📡 Soolala Alert – Réserve de So’o Lala")
 
 # Interface de connexion
 if 'user' not in st.session_state:
