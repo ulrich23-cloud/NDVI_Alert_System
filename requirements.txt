@@ -3,7 +3,6 @@ git+https://github.com/nhorvath/Pyrebase4.git
 pycryptodome==3.19.0
 requests
 pandas
-pydeck
-streamlit-folium
 folium
+streamlit-folium
 setuptools

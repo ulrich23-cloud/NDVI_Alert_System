@@ -2,16 +2,19 @@ import streamlit as st
 import pyrebase
 import requests
 import pandas as pd
-import pydeck as pdk
+import folium
+from streamlit_folium import folium_static
 from firebase_config import firebase_config
 
+# Initialisation Firebase
 firebase = pyrebase.initialize_app(firebase_config)
 auth = firebase.auth()
 
+# Configuration Streamlit
 st.set_page_config(page_title="Système NDVI", layout="centered")
 st.title("📡 Système d'Alerte NDVI – Réserve de So’o Lala")
 
-# Si l'utilisateur n'est pas connecté
+# Interface de connexion
 if 'user' not in st.session_state:
 
     mode = st.radio("Choisissez une action :", ["🔐 Connexion", "🆕 Créer un compte"])
@@ -40,7 +43,7 @@ if 'user' not in st.session_state:
             except:
                 st.error("❌ Email ou mot de passe incorrect.")
 else:
-    # Interface principale après connexion
+    # Interface principale
     st.success(f"Bienvenue, {st.session_state['user']['email']}")
 
     if st.button("🚪 Se déconnecter"):
@@ -49,6 +52,7 @@ else:
 
     st.markdown("---")
     st.subheader("📋 Données d'alerte NDVI")
+
     api_url = "https://ndvi-api-1.onrender.com/ndvi_alerts.php"
 
     try:
@@ -56,7 +60,7 @@ else:
         if response.status_code == 200:
             data = response.json()
 
-            # Nettoyage
+            # Traitement des données
             for d in data:
                 d["NDVI"] = float(d["NDVI"])
                 d["latitude"] = float(d["latitude"])
@@ -65,25 +69,26 @@ else:
             df = pd.DataFrame(data)
             st.dataframe(df)
 
-            # Carte
+            # Carte Folium
             st.subheader("🗺️ Carte des points NDVI")
-            st.pydeck_chart(pdk.Deck(
-                map_style="mapbox://styles/mapbox/satellite-streets-v11",
-                initial_view_state=pdk.ViewState(
-                    latitude=df["latitude"].mean(),
-                    longitude=df["longitude"].mean(),
-                    zoom=9
-                ),
-                layers=[
-                    pdk.Layer(
-                        'ScatterplotLayer',
-                        data=df,
-                        get_position='[longitude, latitude]',
-                        get_color='[255, 0, 0, 160]',
-                        get_radius=300
-                    )
-                ]
-            ))
+            m = folium.Map(
+                location=[df["latitude"].mean(), df["longitude"].mean()],
+                zoom_start=11,
+                tiles="OpenStreetMap"
+            )
+
+            for _, row in df.iterrows():
+                folium.CircleMarker(
+                    location=[row["latitude"], row["longitude"]],
+                    radius=6,
+                    color='red',
+                    fill=True,
+                    fill_color='red',
+                    fill_opacity=0.7,
+                    popup=f"NDVI: {row['NDVI']:.3f}"
+                ).add_to(m)
+
+            folium_static(m)
 
         else:
             st.error("Erreur lors de la récupération des données NDVI.")
